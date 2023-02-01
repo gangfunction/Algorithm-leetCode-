@@ -1,0 +1,1 @@
+Hello, this is purpose of writing leetcode submits
