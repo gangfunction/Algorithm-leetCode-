@@ -7,8 +7,8 @@ class Solution {
             return false;
         }
 
-        int small = Integer.MAX_VALUE;
-        int secondSmall = Integer.MAX_VALUE;
+        var small = Integer.MAX_VALUE;
+        var secondSmall = Integer.MAX_VALUE;
 
         for (int num : nums) {
             if (num <= small) {
