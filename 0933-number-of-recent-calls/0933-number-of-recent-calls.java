@@ -3,17 +3,25 @@ class RecentCounter {
     이게뭐야~
     큐 자료구조도 확인해보고,
     */
-    private Queue<Integer> requests;
+    private int[] queue;
+    private int start, end, size;
+
     public RecentCounter() {
-       requests = new LinkedList<>();
+        queue = new int[10000]; 
+        start = 0;
+        end = 0;
+        size = 0;
     }
-    
+
     public int ping(int t) {
-        requests.add(t);
-        while (!requests.isEmpty()&&requests.peek() < t - 3000) {
-            requests.poll();
+        while (size > 0 && queue[start] < t - 3000) {
+            start = (start + 1) % queue.length;
+            size--;
         }
-        return requests.size();
+        queue[end] = t;
+        end = (end + 1) % queue.length;
+        size++;
+        return size;
     }
 }
 
