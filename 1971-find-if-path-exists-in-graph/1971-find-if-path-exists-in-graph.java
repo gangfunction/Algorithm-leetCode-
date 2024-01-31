@@ -1,10 +1,8 @@
 class Solution {
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-        boolean[] visited = new boolean[n];
-        
+        // Perform BFS
         Queue<Integer> queue = new LinkedList<>();
         queue.offer(source);
-        visited[source] = true;
         
         while (!queue.isEmpty()) {
             int current = queue.poll();
@@ -12,16 +10,17 @@ class Solution {
                 return true;
             }
             
-            for (int[] edge : edges) {
-                int u = edge[0];
-                int v = edge[1];
+            for (int i = 0; i < edges.length; i++) {
+                int u = edges[i][0];
+                int v = edges[i][1];
                 
-                if (u == current && !visited[v]) {
+                // Check if the edge connects to the current node and the other end is unvisited
+                if (u == current && v != -1) {
                     queue.offer(v);
-                    visited[v] = true;
-                } else if (v == current && !visited[u]) {
+                    edges[i][0] = -1; // Mark visited edge
+                } else if (v == current && u != -1) {
                     queue.offer(u);
-                    visited[u] = true;
+                    edges[i][1] = -1; // Mark visited edge
                 }
             }
         }
