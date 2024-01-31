@@ -2,14 +2,18 @@ class Solution {
     private int[] parent;
 
     private int find(int x) {
-        if (parent[x] == x) return x;
-        return parent[x] = find(parent[x]);
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
     }
 
     private void union(int x, int y) {
         int rootX = find(x);
         int rootY = find(y);
-        if (rootX != rootY) parent[rootX] = rootY;
+        if (rootX != rootY) {
+            parent[rootX] = rootY;
+        }
     }
 
     public boolean validPath(int n, int[][] edges, int source, int destination) {
