@@ -15,12 +15,12 @@ class Solution {
             adjacencyList.get(v).add(u);
         }
         
-        // Perform BFS
+        // Perform BFS using HashSet to store visited nodes
         Queue<Integer> queue = new LinkedList<>();
-        boolean[] visited = new boolean[n];
+        Set<Integer> visited = new HashSet<>();
         
         queue.offer(source);
-        visited[source] = true;
+        visited.add(source);
         
         while (!queue.isEmpty()) {
             int current = queue.poll();
@@ -29,9 +29,9 @@ class Solution {
             }
             
             for (int neighbor : adjacencyList.get(current)) {
-                if (!visited[neighbor]) {
+                if (!visited.contains(neighbor)) {
                     queue.offer(neighbor);
-                    visited[neighbor] = true;
+                    visited.add(neighbor);
                 }
             }
         }
