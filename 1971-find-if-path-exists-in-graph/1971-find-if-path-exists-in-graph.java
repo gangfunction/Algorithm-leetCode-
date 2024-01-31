@@ -1,35 +1,36 @@
 class Solution {
     private int[] parent;
-    private int[] rank;
+    private int[] size; // Size array to keep track of the size of each set
 
     private int find(int x) {
-        if (parent[x] != x) {
-            parent[x] = find(parent[x]); // 경로 압축
+        while (x != parent[x]) {
+            parent[x] = parent[parent[x]]; // Path compression
+            x = parent[x];
         }
-        return parent[x];
+        return x;
     }
 
     private void union(int x, int y) {
         int rootX = find(x);
         int rootY = find(y);
         if (rootX != rootY) {
-            // 랭크를 이용한 합병
-            if (rank[rootX] > rank[rootY]) {
-                parent[rootY] = rootX;
-            } else if (rank[rootX] < rank[rootY]) {
+            // Weighted union
+            if (size[rootX] < size[rootY]) {
                 parent[rootX] = rootY;
+                size[rootY] += size[rootX];
             } else {
                 parent[rootY] = rootX;
-                rank[rootX]++;
+                size[rootX] += size[rootY];
             }
         }
     }
 
     public boolean validPath(int n, int[][] edges, int source, int destination) {
         parent = new int[n];
-        rank = new int[n];
+        size = new int[n];
         for (int i = 0; i < n; i++) {
             parent[i] = i;
+            size[i] = 1; // Initialize size for each node as 1
         }
 
         for (int[] edge : edges) {
