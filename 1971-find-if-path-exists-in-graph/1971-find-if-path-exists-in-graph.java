@@ -1,46 +1,34 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class Solution {
-    private int[] parent;
-    private int[] size;
+    private List<List<Integer>> buildGraph(int n, int[][] edges) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
+        return graph;
+    }
+
+    private boolean dfs(List<List<Integer>> graph, boolean[] visited, int source, int destination) {
+        if (source == destination) return true;
+        visited[source] = true;
+        for (int neighbor : graph.get(source)) {
+            if (!visited[neighbor] && dfs(graph, visited, neighbor, destination)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-        parent = new int[n];
-        size = new int[n];
-
-        for (int i = 0; i < n; i++) {
-            parent[i] = i;
-            size[i] = 1;
-        }
-
-        for (int[] edge : edges) {
-            int x = edge[0];
-            int y = edge[1];
-
-            // Union with path compression
-            while (x != parent[x]) {
-                parent[x] = parent[parent[x]];
-                x = parent[x];
-            }
-            while (y != parent[y]) {
-                parent[y] = parent[parent[y]];
-                y = parent[y];
-            }
-
-            // Union by size
-            if (x != y) {
-                if (size[x] < size[y]) {
-                    parent[x] = y;
-                    size[y] += size[x];
-                } else {
-                    parent[y] = x;
-                    size[x] += size[y];
-                }
-            }
-        }
-
-        // Final find with path compression
-        while (source != parent[source]) source = parent[source];
-        while (destination != parent[destination]) destination = parent[destination];
-
-        return source == destination;
+        List<List<Integer>> graph = buildGraph(n, edges);
+        boolean[] visited = new boolean[n];
+        return dfs(graph, visited, source, destination);
     }
+ 
 }
