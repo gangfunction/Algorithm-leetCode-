@@ -25,7 +25,11 @@ class Solution {
         for (int[] edge : edges) {
             int u = edge[0];
             int v = edge[1];
-            union(u, v);
+            int rootU = find(u);
+            int rootV = find(v);
+            if (rootU != rootV) {
+                parent[rootU] = rootV;
+            }
         }
 
         return find(source) == find(destination);
