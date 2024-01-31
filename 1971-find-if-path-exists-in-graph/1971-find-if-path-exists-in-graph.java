@@ -1,41 +1,29 @@
-import java.util.*;
-
 class Solution {
+    private int[] parent;
+
+    private int find(int x) {
+        if (parent[x] == x) return x;
+        return parent[x] = find(parent[x]);
+    }
+
+    private void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        if (rootX != rootY) parent[rootX] = rootY;
+    }
+
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-        // Create an adjacency list to represent the graph
-        List<List<Integer>> adjacencyList = new ArrayList<>(n);
+        parent = new int[n];
         for (int i = 0; i < n; i++) {
-            adjacencyList.add(new ArrayList<>());
+            parent[i] = i;
         }
-        
+
         for (int[] edge : edges) {
             int u = edge[0];
             int v = edge[1];
-            adjacencyList.get(u).add(v);
-            adjacencyList.get(v).add(u);
+            union(u, v);
         }
-        
-        // Perform BFS using HashSet to store visited nodes
-        Queue<Integer> queue = new LinkedList<>();
-        Set<Integer> visited = new HashSet<>();
-        
-        queue.offer(source);
-        visited.add(source);
-        
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            if (current == destination) {
-                return true;
-            }
-            
-            for (int neighbor : adjacencyList.get(current)) {
-                if (!visited.contains(neighbor)) {
-                    queue.offer(neighbor);
-                    visited.add(neighbor);
-                }
-            }
-        }
-        
-        return false;
+
+        return find(source) == find(destination);
     }
 }
