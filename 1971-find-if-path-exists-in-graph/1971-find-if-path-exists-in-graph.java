@@ -1,8 +1,26 @@
+import java.util.*;
+
 class Solution {
     public boolean validPath(int n, int[][] edges, int source, int destination) {
+        // Create an adjacency list to represent the graph
+        List<List<Integer>> adjacencyList = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
+        
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            adjacencyList.get(u).add(v);
+            adjacencyList.get(v).add(u);
+        }
+        
         // Perform BFS
         Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[n];
+        
         queue.offer(source);
+        visited[source] = true;
         
         while (!queue.isEmpty()) {
             int current = queue.poll();
@@ -10,17 +28,10 @@ class Solution {
                 return true;
             }
             
-            for (int i = 0; i < edges.length; i++) {
-                int u = edges[i][0];
-                int v = edges[i][1];
-                
-                // Check if the edge connects to the current node and the other end is unvisited
-                if (u == current && v != -1) {
-                    queue.offer(v);
-                    edges[i][0] = -1; // Mark visited edge
-                } else if (v == current && u != -1) {
-                    queue.offer(u);
-                    edges[i][1] = -1; // Mark visited edge
+            for (int neighbor : adjacencyList.get(current)) {
+                if (!visited[neighbor]) {
+                    queue.offer(neighbor);
+                    visited[neighbor] = true;
                 }
             }
         }
