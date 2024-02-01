@@ -1,22 +1,9 @@
 class Solution {
     public int[][] divideArray(int[] nums, int k) {
         Arrays.sort(nums);
-        List<Integer> list = new ArrayList<>();
-        for(int i : nums){
-            list.add(i);
-        }
+
         int[][] list2 = {};
-        List<List<Integer>> answer = new ArrayList<>();
-        Iterator<Integer> iter = list.iterator();
-        // for(int i: list){
-        //     iter.next();
-        //     if(iter.hasNext()){
-        //         int fg = iter.next();
-        //         if(fg - i >k){
-        //             return  list2;
-        //         }
-        //     }
-        // }
+
         List<Integer> answer2 = new ArrayList<>();
         int b= nums.length/3;
         int[][] answers = new int[nums.length/3][3];
