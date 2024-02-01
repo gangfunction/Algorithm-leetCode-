@@ -9,32 +9,32 @@
  */
 
 class Solution {
-    int count = 0;
+     int count =0;
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        TreeNode res = dfs(root, p, q);
-        return count == 2 ? res : null;
+        TreeNode res = dfs(root,p,q);
+        return count == 2 ? res:null;
     }
-    
-    private TreeNode dfs(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) return root;
-        TreeNode l = dfs(root.left, p, q);
-        TreeNode r = dfs(root.right, p, q);
-        if (root == p || root == q) {
-            count++; 
+    public TreeNode dfs(TreeNode root, TreeNode p, TreeNode q){
+        if(root==null){
             return root;
         }
-        if(l==null && r==null){
+        TreeNode left= dfs(root.left, p, q);
+        TreeNode right= dfs(root.right, p ,q);
+        if(root==p || root==q){
+            count++;
+            return root;
+        }
+        if(left ==null && right ==null){
             return null;
         }
-        if(l!=null && r!=null){
+        if(left!=null&&right!=null){
             return root;
         }
-        if(l==null){
-            return r;
+
+        if(left ==null){
+            return right;
         }else{
-            return l;
+            return left;
         }
-        
     }
-    
 }
