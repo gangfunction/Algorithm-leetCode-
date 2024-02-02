@@ -1,20 +1,24 @@
 class Solution {
     public int countComponents(int n, int[][] edges) {
-        boolean[] visited = new boolean[n];
-        int[][] adjacencyMatrix = new int[n][n];
+        List<List<Integer>> adjacencyList = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            adjacencyList.add(new ArrayList<>());
+        }
         
         for (int[] edge : edges) {
             int from = edge[0];
             int to = edge[1];
-            adjacencyMatrix[from][to] = 1;
-            adjacencyMatrix[to][from] = 1; // Assuming the graph is undirected
+            adjacencyList.get(from).add(to);
+            adjacencyList.get(to).add(from); // Assuming the graph is undirected
         }
 
+        boolean[] visited = new boolean[n];
         int connectedComponents = 0;
 
         for (int i = 0; i < n; i++) {
             if (!visited[i]) {
-                dfs(adjacencyMatrix, i, visited);
+                dfs(adjacencyList, i, visited);
                 connectedComponents++;
             }
         }
@@ -22,11 +26,11 @@ class Solution {
         return connectedComponents;
     }
 
-    private void dfs(int[][] adjacencyMatrix, int node, boolean[] visited) {
+    private void dfs(List<List<Integer>> adjacencyList, int node, boolean[] visited) {
         visited[node] = true;
-        for (int neighbor = 0; neighbor < adjacencyMatrix.length; neighbor++) {
-            if (adjacencyMatrix[node][neighbor] == 1 && !visited[neighbor]) {
-                dfs(adjacencyMatrix, neighbor, visited);
+        for (int neighbor : adjacencyList.get(node)) {
+            if (!visited[neighbor]) {
+                dfs(adjacencyList, neighbor, visited);
             }
         }
     }
