@@ -1,37 +1,47 @@
 class Solution {
     public int countComponents(int n, int[][] edges) {
-        List<List<Integer>> adjacencyList = new ArrayList<>();
+        int[] parent = new int[n];
+        int[] rank = new int[n];
         
+        // Initialize each node as a separate component
         for (int i = 0; i < n; i++) {
-            adjacencyList.add(new ArrayList<>());
+            parent[i] = i;
+            rank[i] = 0;
         }
         
+        int connectedComponents = n; // Initialize to n components
+
         for (int[] edge : edges) {
             int from = edge[0];
             int to = edge[1];
-            adjacencyList.get(from).add(to);
-            adjacencyList.get(to).add(from); // Assuming the graph is undirected
-        }
-
-        boolean[] visited = new boolean[n];
-        int connectedComponents = 0;
-
-        for (int i = 0; i < n; i++) {
-            if (!visited[i]) {
-                dfs(adjacencyList, i, visited);
-                connectedComponents++;
+            
+            int root1 = find(parent, from);
+            int root2 = find(parent, to);
+            
+            if (root1 != root2) {
+                // Union by rank
+                if (rank[root1] < rank[root2]) {
+                    parent[root1] = root2;
+                } else if (rank[root1] > rank[root2]) {
+                    parent[root2] = root1;
+                } else {
+                    parent[root1] = root2;
+                    rank[root2]++;
+                }
+                
+                connectedComponents--; // Reduce the number of components
             }
         }
 
         return connectedComponents;
     }
 
-    private void dfs(List<List<Integer>> adjacencyList, int node, boolean[] visited) {
-        visited[node] = true;
-        for (int neighbor : adjacencyList.get(node)) {
-            if (!visited[neighbor]) {
-                dfs(adjacencyList, neighbor, visited);
-            }
+    private int find(int[] parent, int x) {
+        if (parent[x] == x) {
+            return x;
         }
+        // Path compression
+        parent[x] = find(parent, parent[x]);
+        return parent[x];
     }
 }
