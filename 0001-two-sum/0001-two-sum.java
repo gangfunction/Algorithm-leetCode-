@@ -17,12 +17,11 @@ class Solution {
                 }
             }
         }
-        if(flag == false){
-            int a = target/2;
-            answer2[0] = list.indexOf(a);
-            answer2[1] = list.lastIndexOf(a);
+        int a = target/2;
+        answer2[0] = list.indexOf(a);
+        answer2[1] = list.lastIndexOf(a);
             
-        }
+
         return flag? answer :answer2 ;
 
         
