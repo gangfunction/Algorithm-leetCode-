@@ -1,29 +1,37 @@
 class Solution {
-    public int calculate(String s) {
-        int operand = 0, result = 0, sign = 1;
-        LinkedList<Integer> stack = new LinkedList<>();
-
-        for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-
-            if (Character.isDigit(ch)) {
-                operand = 10 * operand + (ch - '0');
-            } else if (ch == '+' || ch == '-') {
-                result += sign * operand;
-                sign = (ch == '+') ? 1 : -1;
-                operand = 0;
-            } else if (ch == '(') {
-                stack.push(result);
-                stack.push(sign);
-                result = 0;
-                sign = 1;
-            } else if (ch == ')') {
-                result += sign * operand;
-                result *= stack.pop();
-                result += stack.pop();
-                operand = 0;
-            }
+    // + is not used for unary operation
+    // - is not used for unary operation
+    
+public int calculate(String s) {
+    if(s == null) return 0;
+        
+    int result = 0;
+    int sign = 1;
+    int num = 0;
+            
+    Stack<Integer> stack = new Stack<Integer>();
+    stack.push(sign);
+            
+    for(int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+                
+        if(c >= '0' && c <= '9') {
+            num = num * 10 + (c - '0');
+                    
+        } else if(c == '+' || c == '-') {
+            result += sign * num;
+            sign = stack.peek() * (c == '+' ? 1: -1); 
+            num = 0;
+                    
+        } else if(c == '(') {
+            stack.push(sign);
+                    
+        } else if(c == ')') {
+            stack.pop();
         }
-        return result + (sign * operand);
     }
+            
+    result += sign * num;
+    return result;
+}
 }
