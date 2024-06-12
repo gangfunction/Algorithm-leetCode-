@@ -1,18 +1,27 @@
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
         Set<String> wordSet = new HashSet<>(wordDict);
-        boolean[] dp = new boolean[s.length() + 1];
-        dp[0] = true; // 빈 문자열은 항상 true
+        Map<String, Boolean> memo = new HashMap<>();
+        return wordBreakHelper(s, wordSet, memo);
+    }
+
+    private boolean wordBreakHelper(String s, Set<String> wordSet, Map<String, Boolean> memo) {
+        if (s.isEmpty()) {
+            return true;
+        }
+        if (memo.containsKey(s)) {
+            return memo.get(s);
+        }
 
         for (int i = 1; i <= s.length(); i++) {
-            for (int j = 0; j < i; j++) {
-                if (dp[j] && wordSet.contains(s.substring(j, i))) {
-                    dp[i] = true;
-                    break;
-                }
+            String prefix = s.substring(0, i);
+            if (wordSet.contains(prefix) && wordBreakHelper(s.substring(i), wordSet, memo)) {
+                memo.put(s, true);
+                return true;
             }
         }
 
-        return dp[s.length()];
+        memo.put(s, false);
+        return false;
     }
 }
